@@ -44,12 +44,13 @@ function App() {
   //   // handle success
   // }, 0);
   return (
-    <SiteContext.Provider value={{ name: "Bob" }}>
+    // @ts-ignore
+    <SiteContext value={{ name: "Bob" }}>
       <Suspense fallback={<>loading</>}>
         <Podcast />
       </Suspense>
       <Footer />
-    </SiteContext.Provider>
+    </SiteContext>
   );
 }
 
