@@ -1,11 +1,21 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useState, useActionState, useOptimistic } from "types-react";
+import reactLogo from "./assets/react.svg";
+import viteLogo from "/vite.svg";
+import "./App.css";
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [name, setName] = useState(0);
+  const [optimisticName, setOptimisticName] = useOptimistic(name);
+  const [error, submitAction, isPending] = useActionState(async () => {
+    const error = false;
+    if (error) {
+      // You can return any result of the action.
+      // Here, we return only the error.
+      return error;
+    }
 
+    // handle success
+  }, 0);
   return (
     <>
       <div>
@@ -18,9 +28,9 @@ function App() {
       </div>
       <h1>Vite + React</h1>
       <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
+        {/* <button onClick={() => setCount((count) => count + 1)}>
           count is {count}
-        </button>
+        </button> */}
         <p>
           Edit <code>src/App.tsx</code> and save to test HMR
         </p>
@@ -29,7 +39,7 @@ function App() {
         Click on the Vite and React logos to learn more
       </p>
     </>
-  )
+  );
 }
 
-export default App
+export default App;
