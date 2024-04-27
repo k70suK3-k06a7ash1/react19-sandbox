@@ -12,6 +12,7 @@
   "dependencies": {
     "@types/react": "npm:types-react@beta",
     "@types/react-dom": "npm:types-react-dom@beta",
+    "effect": "^3.0.6",
     "react": "^19.0.0-beta-94eed63c49-20240425",
     "react-dom": "^19.0.0-beta-94eed63c49-20240425"
   },
