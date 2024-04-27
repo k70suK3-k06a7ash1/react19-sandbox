@@ -1,12 +1,34 @@
 // @ts-ignore
 import { useActionState, useOptimistic, use, cache } from "react";
+import { Effect, Either } from "effect";
+import { Schema } from "@effect/schema";
 import { createContext, Suspense } from "react";
 
 const SiteContext = createContext({ name: "" });
 
-type PodcastShow = {
-  title: string;
-};
+const ApiResponse = Schema.Struct({ title: Schema.String });
+
+interface ApiResponse extends Schema.Schema.Type<typeof ApiResponse> {}
+
+const program: Effect.Effect<ApiResponse, Error> = Effect.gen(function* (_) {
+  const response = yield* Effect.tryPromise({
+    try: () => fetch("https://syntax.fm/api/shows/latest"),
+    catch: () => new Error("failed"),
+  });
+  if (!response.ok) {
+    return yield* Effect.fail(new Error());
+  }
+  const json = yield* Effect.tryPromise({
+    try: () => response.json(),
+    catch: () => new Error("error"),
+  });
+  return yield* _(
+    json,
+    Schema.decodeUnknownEither(ApiResponse),
+    Either.mapLeft(() => new Error())
+  );
+});
+
 function Footer() {
   const { name } = use(SiteContext);
   return (
@@ -16,12 +38,8 @@ function Footer() {
   );
 }
 
-const Podcast = cache(() => {
-  const podcast = use(
-    fetch("https://syntax.fm/api/shows/latest").then(
-      (x) => x.json() as Promise<PodcastShow>
-    )
-  );
+const Podcast = () => {
+  const podcast = use<ApiResponse>(Effect.runPromise(program));
 
   return (
     <>
@@ -29,20 +47,8 @@ const Podcast = cache(() => {
       <meta property="og:title" content={podcast.title} />
     </>
   );
-});
+};
 function App() {
-  // const [name, setName] = useState(0);
-  // const [optimisticName, setOptimisticName] = useOptimistic(name);
-  // const [error, submitAction, isPending] = useActionState(async () => {
-  //   const error = false;
-  //   if (error) {
-  //     // You can return any result of the action.
-  //     // Here, we return only the error.
-  //     return error;
-  //   }
-
-  //   // handle success
-  // }, 0);
   return (
     // @ts-ignore
     <SiteContext value={{ name: "Bob" }}>
@@ -55,6 +61,3 @@ function App() {
 }
 
 export default App;
-
-// const container = document.getElementById("app");
-// if (!container) throw new Error("no container found");
