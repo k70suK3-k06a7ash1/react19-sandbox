@@ -10,10 +10,10 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "react": "^19.0.0-beta-94eed63c49-20240425",
-    "react-dom": "^19.0.0-beta-94eed63c49-20240425",
     "@types/react": "npm:types-react@beta",
-    "@types/react-dom": "npm:types-react-dom@beta"
+    "@types/react-dom": "npm:types-react-dom@beta",
+    "react": "^19.0.0-beta-94eed63c49-20240425",
+    "react-dom": "^19.0.0-beta-94eed63c49-20240425"
   },
   "overrides": {
     "@types/react": "npm:types-react@beta",
@@ -26,7 +26,7 @@
     "eslint": "^8.57.0",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.4.6",
-    "typescript": "^5.2.2",
+    "typescript": "^5.5.0-beta",
     "vite": "^5.2.0"
   }
 }
